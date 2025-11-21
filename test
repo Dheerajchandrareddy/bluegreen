@@ -1,0 +1,99 @@
+baseDomain = dheeraj.com and cluster name = ocp4
+
+ocp4.dheeraj.com
+
+/var/named/forward.zone:
+---------------------------------------
+
+$TTL 1W
+@       IN  SOA ns1.dheeraj.com. root.dheeraj.com. (
+            2025112101
+            3H
+            30M
+            2W
+            1W )
+        IN  NS  ns1.dheeraj.com.
+        IN  MX 10 smtp.dheeraj.com.
+
+; DNS server
+ns1.dheeraj.com.              IN A  192.168.1.5
+
+; ----------------------------------------------------------------------
+; OpenShift Required Records (CHANGE IPs as per your environment)
+; ----------------------------------------------------------------------
+
+; API endpoints
+api.ocp4.dheeraj.com.         IN A  192.168.1.5
+api-int.ocp4.dheeraj.com.     IN A  192.168.1.5
+
+; Apps wildcard
+*.apps.ocp4.dheeraj.com.      IN A  192.168.1.5
+
+; Bootstrap node
+bootstrap.ocp4.dheeraj.com.   IN A  192.168.1.96
+
+; Control-plane (masters)
+master0.ocp4.dheeraj.com.     IN A  192.168.1.97
+master1.ocp4.dheeraj.com.     IN A  192.168.1.98
+master2.ocp4.dheeraj.com.     IN A  192.168.1.99
+
+; Workers
+worker0.ocp4.dheeraj.com.     IN A  192.168.1.11
+worker1.ocp4.dheeraj.com.     IN A  192.168.1.12
+
+; ----------------------------------------------------------------------
+; Mirror Registry for disconnected installation
+; ----------------------------------------------------------------------
+mirror.ocp4.dheeraj.com.      IN A  192.168.1.50
+
+==================================================================
+
+
+Reverse zone file:
+
+/var/named/reverse.zone
+
+$TTL 1W
+@       IN  SOA ns1.dheeraj.com. root.dheeraj.com. (
+            2025112101
+            3H
+            30M
+            2W
+            1W )
+        IN  NS  ns1.dheeraj.com.
+
+5       IN PTR api.ocp4.dheeraj.com.
+5       IN PTR api-int.ocp4.dheeraj.com.
+
+96      IN PTR bootstrap.ocp4.dheeraj.com.
+
+97      IN PTR master0.ocp4.dheeraj.com.
+98      IN PTR master1.ocp4.dheeraj.com.
+99      IN PTR master2.ocp4.dheeraj.com.
+
+11      IN PTR worker0.ocp4.dheeraj.com.
+12      IN PTR worker1.ocp4.dheeraj.com.
+
+50      IN PTR mirror.ocp4.dheeraj.com.
+
+
+
+-> Add zones to named.conf
+
+zone "dheeraj.com" IN {
+    type master;
+    file "/var/named/dheeraj.com.zone";
+};
+
+zone "1.168.192.in-addr.arpa" IN {
+    type master;
+    file "/var/named/1.168.192.in-addr.arpa.zone";
+};
+
+
+systemctl reload named
+
+
+
+
+
