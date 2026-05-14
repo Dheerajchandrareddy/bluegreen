@@ -61,7 +61,7 @@
             <li><a href="#">Home</a></li>
             <li>Basic</li>
           </ol>
-          <h1>Welcome, TCS team! Thank you for taking the time to attend today’s Tech Day.</h1>
+          <h1>Welcome, Capgemini team! Thank you for taking the time to attend today’s Demo.</h1>
           <p>The purpose of this application is to demonstrate several interesting features about containers. We hope you enjoy it!</p>
         </div>
       </div>
